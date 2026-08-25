@@ -1,0 +1,7 @@
+{
+  "name":"ball-duel-attraction","version":"1.0.0","description":"Ball Duel attraction client for StriveX","author":"StriveX","main":"main.js",
+  "scripts":{"start":"electron .","check":"node --check main.js && node --check preload.js && node --check public/app.js && node --test tests/*.test.js","build":"electron-builder --win portable"},
+  "dependencies":{"@serialport/parser-readline":"^13.0.0","serialport":"^13.0.0"},
+  "devDependencies":{"electron":"37.2.0","electron-builder":"^26.0.12"},
+  "build":{"appId":"local.quest.ballduel","productName":"Ball Duel","asar":true,"npmRebuild":false,"files":["main.js","preload.js","config.json","public/**/*","lib/**/*","package.json"],"extraResources":[{"from":"music","to":"music"}],"win":{"target":["portable"]},"artifactName":"Ball-Duel-${version}.${ext}"}
+}

@@ -1,0 +1,5 @@
+.unlock-note{font-size:clamp(20px,2.2vw,36px);color:#ffd15c;text-transform:uppercase;letter-spacing:.06em;margin:-1vh 0 3vh;text-shadow:0 0 14px #ff9d00}
+.mode-choice.locked{filter:saturate(.2);opacity:.55}
+.mode-choice.locked .mode-btn{cursor:not-allowed}
+.lock-icon{position:absolute;left:16px;top:15px;font-size:34px;z-index:3;filter:none}
+.back{min-width:92px;padding-left:28px;padding-right:28px;font-size:clamp(38px,4vw,64px);line-height:1}

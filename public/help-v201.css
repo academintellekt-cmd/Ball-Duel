@@ -1,0 +1,52 @@
+.advanced-demo .advanced-lane{grid-template-columns:105px 1fr;min-height:88px}
+.mechanic-svg{display:block;width:min(100%,980px);height:auto;min-height:270px;margin:12px auto;overflow:visible}
+.mechanic-svg .svg-button{fill:#121b35;stroke:#506081;stroke-width:2}
+.mechanic-svg .svg-player{fill:#e9f2ff;font:700 22px system-ui}
+.mechanic-svg .svg-hand{fill:#fff;font:42px "Segoe UI Symbol",sans-serif;text-anchor:middle}
+.advanced-demo .advanced-dots{justify-content:center}
+.advanced-demo .advanced-dots .m-dot{width:38px;height:38px}
+.demo-paint .m-dot,.demo-catchColor .m-dot,.demo-intersection .m-dot,.demo-pong .m-dot{animation:none;background:#121b35;box-shadow:none}
+.m-dot{position:relative}
+.demo-hand{position:absolute;left:50%;top:72%;transform:translate(-50%,18px);font-size:38px;z-index:8;opacity:0;pointer-events:none}
+
+/* Захват цвета: обе руки попадают точно в одну парную позицию. */
+.demo-paint .d4{animation:paintShared 7s steps(1,end) infinite}
+.demo-paint .blue-hand{animation:pressBluePaint 7s steps(1,end) infinite}
+.demo-paint .orange-hand{animation:pressOrangePaint 7s steps(1,end) infinite}
+@keyframes paintShared{0%,16%{background:#121b35}17%,54%{background:#168cff;box-shadow:0 0 17px #168cff}55%,92%{background:#ff781b;box-shadow:0 0 17px #ff781b}93%,100%{background:#121b35}}
+@keyframes pressBluePaint{0%,13%,25%,100%{opacity:0}14%,24%{opacity:1;transform:translate(-50%,0)}}
+@keyframes pressOrangePaint{0%,51%,64%,100%{opacity:0}52%,63%{opacity:1;transform:translate(-50%,0)}}
+
+/* Поймай свой цвет: цвет переключается ступенчато, руки нажимают активный кружок. */
+.demo-catchColor .blue-lane .d3,.demo-catchColor .orange-lane .d5{animation:catchCycle 4.8s steps(1,end) infinite}
+.demo-catchColor .blue-catch-hand{animation:catchBluePress 4.8s steps(1,end) infinite}
+.demo-catchColor .orange-catch-hand{animation:catchOrangePress 4.8s steps(1,end) infinite}
+@keyframes catchCycle{0%,24%{background:#ff781b;box-shadow:0 0 15px #ff781b}25%,49%{background:#168cff;box-shadow:0 0 15px #168cff}50%,74%{background:#29d66f;box-shadow:0 0 15px #29d66f}75%,100%{background:#ff4db8;box-shadow:0 0 15px #ff4db8}}
+@keyframes catchBluePress{0%,30%,45%,100%{opacity:0}31%,44%{opacity:1;transform:translate(-50%,0)}}
+@keyframes catchOrangePress{0%,5%,20%,100%{opacity:0}6%,19%{opacity:1;transform:translate(-50%,0)}}
+
+/* Пересечение: свет перескакивает с кнопки на кнопку, без плавного движения между ними. */
+.intersection-track{position:relative;display:grid;grid-template-columns:repeat(15,1fr);gap:3px;width:100%}
+.intersection-track .m-dot{width:22px;height:22px;border-radius:50%;border:1px solid #506081}
+.demo-intersection .m-dot::before,.demo-intersection .m-dot::after{content:"";position:absolute;inset:-1px;border-radius:50%;opacity:0;animation:crossStep 6s steps(1,end) infinite}
+.demo-intersection .m-dot::before{animation-delay:calc(var(--forward) * -.4s)}
+.demo-intersection .m-dot::after{animation-delay:calc(var(--backward) * -.4s)}
+.demo-intersection .blue-lane .m-dot::before,.demo-intersection .blue-lane .m-dot::after{background:#168cff;box-shadow:0 0 14px #168cff}
+.demo-intersection .orange-lane .m-dot::before,.demo-intersection .orange-lane .m-dot::after{background:#ff781b;box-shadow:0 0 14px #ff781b}
+@keyframes crossStep{0%,6%{opacity:1}7%,100%{opacity:0}}
+.demo-intersection .blue-cross-hand,.demo-intersection .orange-cross-hand{animation:crossPress 6s steps(1,end) infinite}
+@keyframes crossPress{0%,45%,61%,100%{opacity:0}46%,60%{opacity:1;transform:translate(-50%,0)}}
+
+/* Пин-понг: мяч меняет дискретные позиции, руки закреплены на ракетках. */
+.demo-pong{position:relative;grid-template-columns:1fr 1fr;gap:10px}
+.pong-field{position:relative;display:grid;grid-template-columns:repeat(15,1fr);gap:3px;padding:14px 18px;border:2px solid #168cff;border-radius:13px}
+.pong-field.orange-field{border-color:#ff781b}
+.pong-field .m-dot{width:22px;height:22px;border-radius:50%;border:1px solid #506081}
+.pong-field .paddle{position:absolute;top:14px;left:37%;width:22px;height:22px;border-radius:50%;background:#32e875;box-shadow:0 0 18px #32e875}
+.orange-field .paddle{left:67%}
+.demo-ball{position:absolute;top:16px;left:18%;width:22px;height:22px;border-radius:50%;background:#1b9cff;box-shadow:0 0 18px #1b9cff;animation:pongAcross 4.8s steps(12,end) infinite}
+.demo-pong .blue-pong-hand{animation:pongHandBlue 4.8s steps(1,end) infinite}
+.demo-pong .orange-pong-hand{animation:pongHandOrange 4.8s steps(1,end) infinite}
+@keyframes pongAcross{0%,8%{left:18%;background:#1b9cff}48%{left:82%;background:#1b9cff}52%{left:82%;background:#ff781b}92%,100%{left:18%;background:#ff781b}}
+@keyframes pongHandBlue{0%,2%,16%,100%{opacity:0}3%,15%{opacity:1;transform:translate(-50%,0)}}
+@keyframes pongHandOrange{0%,43%,59%,100%{opacity:0}44%,58%{opacity:1;transform:translate(-50%,0)}}

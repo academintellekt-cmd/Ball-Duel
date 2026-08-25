@@ -1,0 +1,2 @@
+const{SerialPort}=require('serialport');
+(async()=>{const ports=await SerialPort.list();console.log('Serial devices:');for(const info of ports)console.log(`- ${info.path} ${info.friendlyName||info.manufacturer||''}`);console.log('\nExpected Arduino identities: BALL_DUEL_LED_BLUE and BALL_DUEL_LED_ORANGE.');console.log('Gamepad status is shown inside Ball Duel.');})().catch(e=>{console.error(e);process.exitCode=1});

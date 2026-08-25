@@ -1,0 +1,15 @@
+.ring-stage > .ring-arrow.left { left: -14%; }
+.ring-stage > .ring-arrow.right { right: -14%; }
+.ring-ball.buff::after,
+.ring-emitter[data-icon]::after {
+  content: attr(data-icon);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font: 900 clamp(12px, 1.25vw, 21px)/1 "Segoe UI Symbol", "Segoe UI", sans-serif;
+  text-shadow: 0 1px 3px #000, 0 0 5px #000;
+}
+.ring-ball.buff { outline: 3px solid #fff; outline-offset: 2px; }
+.ring-emitter[data-icon] { color: #fff; }

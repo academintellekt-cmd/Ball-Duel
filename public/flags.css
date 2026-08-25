@@ -1,0 +1,7 @@
+.flag{display:block;width:38px;height:25px;margin:auto;border-radius:3px;box-shadow:0 0 0 1px #fff7,0 2px 5px #0008;position:relative;overflow:hidden}
+.flag-ru{background:linear-gradient(#fff 0 33.33%,#1854ba 33.33% 66.66%,#d52b1e 66.66%)}
+.flag-de{background:linear-gradient(#111 0 33.33%,#d00 33.33% 66.66%,#ffce00 66.66%)}
+.flag-fr{background:linear-gradient(90deg,#163d91 0 33.33%,#fff 33.33% 66.66%,#ed2939 66.66%)}
+.flag-ja{background:radial-gradient(circle at center,#bc002d 0 29%,transparent 31%),#fff}
+.flag-zh{background:#de2910}.flag-zh:after{content:"★";position:absolute;left:4px;top:0;color:#ffde00;font-size:13px}
+.flag-en{background:linear-gradient(33deg,transparent 43%,#fff 44% 48%,#cf142b 49% 53%,#fff 54% 58%,transparent 59%),linear-gradient(-33deg,transparent 43%,#fff 44% 48%,#cf142b 49% 53%,#fff 54% 58%,transparent 59%),linear-gradient(90deg,transparent 40%,#fff 40% 46%,#cf142b 46% 54%,#fff 54% 60%,transparent 60%),linear-gradient(transparent 36%,#fff 36% 43%,#cf142b 43% 57%,#fff 57% 64%,transparent 64%),#21468b}

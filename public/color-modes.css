@@ -1,0 +1,35 @@
+.difficulty-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;width:min(900px,92vw)}
+.difficulty-grid .btn{min-height:120px}
+.round-timer{font-size:clamp(18px,2vw,34px);margin-top:12px;color:#dbe8ff}
+.color-pattern{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:18px auto;max-width:520px;transition:opacity .7s,filter .7s}
+.color-pattern.fade{opacity:0;filter:blur(10px)}
+.color-pattern i{display:grid;place-items:center;width:clamp(38px,4vw,62px);aspect-ratio:1;border-radius:50%;background:var(--c);box-shadow:0 0 22px var(--c);font-style:normal}
+.color-pattern b{font-size:clamp(14px,1.5vw,22px);color:#06101d;text-shadow:0 1px #fff8}
+.mode-screen{justify-content:flex-start;padding-top:2vh}
+.mode-screen .brand{flex:0 0 auto;font-size:clamp(58px,8vh,110px)}
+.mode-screen h1{flex:0 0 auto;margin:.6vh 0}
+.mode-screen .unlock-note{flex:0 0 auto}
+.mode-screen .mode-grid{flex:1 1 auto;min-height:0;max-height:58vh;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;padding:10px 14px 90px 4px;scrollbar-color:var(--b) #101831;scrollbar-width:thin}
+.mode-screen .mode-grid::-webkit-scrollbar{width:12px}
+.mode-screen .mode-grid::-webkit-scrollbar-track{background:#101831;border-radius:8px}
+.mode-screen .mode-grid::-webkit-scrollbar-thumb{background:linear-gradient(var(--b),var(--o));border-radius:8px}
+.rfid-box .brand{width:100%;max-width:100%;font-size:clamp(54px,9vw,130px);letter-spacing:.055em;white-space:nowrap;text-align:center;transform:translateX(-.035em)}
+.session-exit{position:absolute;left:4vw;top:4vh;width:76px;height:76px;min-width:76px;padding:17px;border-color:var(--o);border-radius:0;background:#08112e;box-shadow:0 0 22px #ff5a0088;z-index:20}
+.session-exit svg,.game-quit svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.game-quit{position:absolute;left:50%;bottom:3vh;transform:translateX(-50%);display:flex;align-items:center;gap:12px;padding:13px 22px;font-size:clamp(16px,1.5vw,24px);z-index:18}
+.game-quit svg{width:31px;height:31px;flex:0 0 31px}
+.confirm-modal{position:absolute;inset:0;z-index:100;display:grid;place-items:center;background:#02040de8;backdrop-filter:blur(7px)}
+.confirm-box{width:min(680px,88vw);padding:42px;border:2px solid var(--b);background:#071126;box-shadow:0 0 40px #168cff66;text-align:center}
+.confirm-box h2{font-size:clamp(28px,3vw,48px);margin:0 0 34px}
+.confirm-box>div{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.help-screen .help-panel{border-radius:0;background:#071126;border-color:#2e9ed9;box-shadow:0 0 28px #168cff44;padding:3vh 4vw}
+.help-screen .help-panel h1{margin:0 0 1vh}
+.help-screen .help-panel p{margin:0 auto 1vh;max-width:980px}
+.private-patterns{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:min(560px,38vw);margin:8px auto}
+.private-pattern{min-height:118px;padding:8px;border:1px solid #258ed0;border-radius:12px;background:#061126cc}
+.private-pattern.p2{border-color:#e46d24}
+.private-pattern small{display:block;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.private-pattern .color-pattern{gap:6px;margin:7px auto}
+.private-pattern .color-pattern i{width:32px}
+.private-pattern .color-pattern b{font-size:12px}
+.private-pattern strong{display:block;margin-top:24px;font-size:14px;color:#bed4ef}
