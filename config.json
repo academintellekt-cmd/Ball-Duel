@@ -5,6 +5,6 @@
   "game":{"flashMs":700,"bonuses":{"streakX2":10,"streakGreen":20,"durationMs":7000},"values":{"difficulty":{"easy":{"changeMs":10000},"medium":{"changeMs":7000},"hard":{"changeMs":5000},"extreme":{"changeMs":5000}}}},
   "ledBlue":{"enabled":true,"port":"auto","baudRate":115200,"identity":"BALL_DUEL_LED_BLUE","reconnectMs":3000,"commandIntervalMs":8},
   "ledOrange":{"enabled":true,"port":"auto","baudRate":115200,"identity":"BALL_DUEL_LED_ORANGE","reconnectMs":3000,"commandIntervalMs":8},
-  "strivex":{"enabled":true,"wsPort":4210,"developmentMode":false},
+  "strivex":{"enabled":true,"wsPort":4211,"developmentMode":false},
   "audio":{"enabled":true,"menuPlaylistFolder":"music/menu","gamePlaylistFolders":{"free":"music/games/free","targets":"music/games/targets","values":"music/games/values"},"ringSoundFolders":{"blue":"music/effects/blue","green":"music/effects/green","yellow":"music/effects/yellow","red":"music/effects/red"},"musicVolume":0.35,"effectsVolume":0.7,"fadeMs":1000,"countdown":"music/countdown.mp3","startCountdown":"music/countdown1.mp3","end":"music/end.mp3","bonusX2":"music/bonus-x2.mp3","bonusGreen":"music/bonus-green.mp3"}
 }

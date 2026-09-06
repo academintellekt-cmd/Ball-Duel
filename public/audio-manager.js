@@ -1,3 +1,4 @@
+const clamp01=v=>v<0?0:v>1?1:v;
 class LightningAudio {
   constructor(config={}) {
     this.config=config;this.enabled=config.enabled!==false;this.music={};this.effects={};this.playlists={};this.randomBags={};this.current=null;this.fadeToken=0;this.duckToken=0;
@@ -34,7 +35,7 @@ class LightningAudio {
   setGameDuck(active,duration=450){
     this.gameDucked=!!active;const game=this.music.game;if(!game||this.current!=='game')return;
     const token=++this.duckToken,from=game.volume,target=this.musicTarget('game'),started=performance.now();
-    const step=now=>{if(token!==this.duckToken||this.current!=='game')return;const p=Math.min(1,(now-started)/Math.max(1,duration));game.volume=from+(target-from)*p;if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step);
+    const step=now=>{if(token!==this.duckToken||this.current!=='game')return;const p=Math.min(1,(now-started)/Math.max(1,duration));game.volume=clamp01(from+(target-from)*p);if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step);
   }
   effect(name){const base=this.effects[name];if(!base)return;const audio=base.cloneNode();audio.volume=this.config.effectsVolume??.85;audio.play().catch(()=>{})}
   randomEffect(files,key='random'){
@@ -54,8 +55,8 @@ class LightningAudio {
     const started=Date.now(),step=()=>{
       if(token!==this.fadeToken)return;
       const p=Math.min(1,(Date.now()-started)/Math.max(1,duration));
-      for(const item of fading)item.audio.volume=item.volume*(1-p);
-      if(to)to.volume=toStart+(target-toStart)*p;
+      for(const item of fading)item.audio.volume=clamp01(item.volume*(1-p));
+      if(to)to.volume=clamp01(toStart+(target-toStart)*p);
       if(p<1)return;
       clearInterval(this.fadeTimer);this.fadeTimer=null;
       for(const item of fading){item.audio.pause();try{item.audio.currentTime=0}catch{}}
