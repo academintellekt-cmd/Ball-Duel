@@ -1,0 +1,84 @@
+/* Duel lobby (Lava Jump prototype look). Scoped under .lobby-screen; sized
+   for a 1080x1920 portrait touch screen with vw/svh units like the prototype. */
+.lobby-screen{--lb-bg:#1c1c1e;--lb-surface:#232326;--lb-surface-2:#2b2b2f;--lb-line:#3d3d42;--lb-text:#fff;--lb-muted:#9ea3ad;--lb-orange:#fe7800;--lb-orange-2:#ffb331;--lb-red:#fe112e;--lb-green:#3ddc84;
+  position:fixed;inset:0;display:flex;flex-direction:column;gap:.8svh;padding:1.6svh 3vw 1.6svh;background:radial-gradient(120% 50% at 80% 0%,#3a1a0d 0%,transparent 60%),var(--lb-bg);color:var(--lb-text);
+  font-family:'Involve','Inter','Segoe UI',Arial,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.lobby-screen :where(button){font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.lobby-head{position:relative}
+.lobby-brand{font:900 3vw/1 'Bowler','Involve',Arial,sans-serif;letter-spacing:.06em;background:linear-gradient(90deg,#fff 0 55%,var(--lb-red) 55%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lobby-status{display:flex;align-items:center;gap:1.4vw;margin-top:.6svh;font-size:2.4vw;color:var(--lb-green)}
+.lobby-status i{width:1.6vw;height:1.6vw;border-radius:50%;background:currentColor;box-shadow:0 0 1.2vw currentColor}
+.lobby-status.busy{color:var(--lb-orange-2)}.lobby-status.offline{color:var(--lb-red)}
+.lobby-clock{margin-left:auto;color:var(--lb-text);font-variant-numeric:tabular-nums}
+.lobby-title{margin:.4svh 0 0;font:800 5.4vw/1.05 'Inter',Arial,sans-serif;letter-spacing:.01em}
+.lobby-subtitle{margin-top:.4svh;font-size:1.8vw;letter-spacing:.5em;text-transform:uppercase;color:var(--lb-muted)}
+.lobby-cols{display:grid;grid-template-columns:1fr 1fr;gap:0;flex:1 1 0;min-height:0;border:1px solid var(--lb-line);border-radius:2vw;background:#1f1f22cc}
+.lobby-col{display:flex;flex-direction:column;min-height:0;padding:1.2svh 1.6vw}
+.lobby-col+.lobby-col{border-left:1px solid var(--lb-line)}
+.lobby-col h2{display:flex;align-items:center;gap:1.6vw;margin:0 0 .8svh;font-size:3vw}
+.lobby-col-icon{width:4.4vw;height:4.4vw;color:var(--lb-muted)}
+.lobby-list,.lobby-settings{display:flex;flex-direction:column;gap:.5svh;overflow-y:auto;min-height:0;scrollbar-width:none}
+.lobby-settings h3{margin:.6svh 0 .1svh;font-size:2.2vw;font-weight:600;color:var(--lb-muted);text-transform:uppercase;letter-spacing:.12em}
+.lobby-row{box-sizing:border-box;display:flex;align-items:center;gap:1vw;min-height:6.4vw;border:1px solid var(--lb-line);border-radius:1.6vw;background:var(--lb-surface)}
+.lobby-row.active{border-color:var(--lb-orange);background:linear-gradient(90deg,#4a2a10,#2b2016);box-shadow:inset .8vw 0 0 var(--lb-orange)}
+.lobby-row.locked{opacity:.62}
+.lobby-pick{flex:1;display:flex;align-items:center;gap:2vw;min-width:0;height:100%;padding:.6vw 1.6vw;border:0;background:none;text-align:left;font-size:2.8vw;font-weight:600}
+button.lobby-row.lobby-pick{width:100%}
+.lobby-pick span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lobby-mode-icon{width:4.6vw;height:4.6vw;flex:none;color:#aeb5c0}
+.lobby-row.active .lobby-mode-icon{color:var(--lb-orange-2)}
+.lobby-lock{width:3vw;height:3vw;flex:none;color:var(--lb-muted)}
+.lobby-check{width:3.2vw;height:3.2vw;flex:none;color:var(--lb-orange-2)}
+.lobby-info{flex:none;width:6vw;height:6vw;margin-right:.4vw;border:0;border-radius:50%;background:none;color:#d7dbe2}
+.lobby-info svg{width:4.4vw;height:4.4vw}
+.lobby-num{display:grid;place-items:center;flex:none;width:4.8vw;height:4.8vw;border:2px solid #d7dbe2;border-radius:50%;font-size:2.6vw}
+.lobby-row.active .lobby-num{border-color:transparent;background:linear-gradient(180deg,var(--lb-orange-2),var(--lb-orange));color:#1c1c1e}
+.lobby-seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:1vw}
+.lobby-seg button{min-height:6.4vw;padding:.6vw;border:1px solid var(--lb-line);border-radius:1.6vw;background:var(--lb-surface);font-size:2.6vw;font-weight:600}
+.lobby-seg button.active{border-color:var(--lb-orange);background:linear-gradient(180deg,#5a3311,#33210f);color:var(--lb-orange-2)}
+.lobby-fixed{padding:1.4svh 1vw;border:1px dashed var(--lb-line);border-radius:1.6vw;text-align:center;font-size:2.8vw;color:var(--lb-muted)}
+.lobby-duel{flex:0 0 auto;padding:1svh 2vw 1.2svh;border:1px solid var(--lb-line);border-radius:2vw;background:#1f1f22cc}
+.lobby-duel-head{display:flex;justify-content:space-between;align-items:baseline}
+.lobby-duel-head h2{margin:0;font-size:3vw}.lobby-duel-head span{font-size:2.8vw;color:var(--lb-muted)}
+.lobby-slots{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:14vw;margin-top:1svh}
+.lobby-slot{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8svh;min-height:15svh;padding:1.2vw;border:1px solid var(--lb-line);border-radius:1.8vw;background:var(--lb-surface);text-align:center}
+.lobby-slot b{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:3.4vw}
+.lobby-slot small{font-size:2.4vw;color:var(--lb-muted)}
+.lobby-slot.empty{border-style:dashed;color:#91a0b2}
+.lobby-plus{display:grid;place-items:center;width:12vw;height:12vw;border:2px dashed #55606e;border-radius:2.4vw;font-size:6vw;font-weight:300}
+.lobby-remove{position:absolute;top:1vw;right:1vw;width:6.4vw;height:6.4vw;border:1px solid var(--lb-line);border-radius:1.4vw;background:#2a2d33;font-size:3.4vw}
+.lobby-hex{width:14vw;height:15.4vw;filter:drop-shadow(0 0 1.5vw currentColor)}
+.hex-orange{color:#ff9a1f}.hex-purple{color:#b63bff}.hex-cyan{color:#25c7ff}.hex-red{color:#ff3b4f}.hex-gold{color:#ffd23f}.hex-green{color:#3ddc84}.hex-blue{color:#2f7dff}
+.lobby-vs{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) skew(-12deg) rotate(-8deg);font:900 8vw/1 'Inter',Arial,sans-serif;letter-spacing:-.07em;color:var(--lb-orange-2);-webkit-text-stroke:.16vw #ffe7ab;text-shadow:.3vw .5vw 0 #ac2716,0 0 3vw #ff5c0099;pointer-events:none}
+.lobby-launch{display:flex;flex-direction:column;align-items:center;gap:.4svh}
+.lobby-choice{font-size:2.8vw}
+.lobby-hint{min-height:2.2vw;font-size:2.2vw;color:var(--lb-orange)}
+.lobby-start{width:100%;min-height:8svh;border:1px solid #4a4d55;border-radius:2.4vw;background:linear-gradient(180deg,#3a3d44,#2a2c31);color:#7d838e;font:800 7vw/1 'Inter',Arial,sans-serif;letter-spacing:.04em}
+.lobby-start span{display:inline-block;margin-left:2vw;font-weight:400}
+.lobby-start.ready{border-color:#ff5a6a;background:linear-gradient(180deg,#ff2b45,#c8102e);color:#fff;box-shadow:0 1svh 3vw #fe112e55}
+.lobby-start:disabled{cursor:default}
+.lobby-finish{width:100%;min-height:5svh;border:1px solid var(--lb-line);border-radius:2vw;background:var(--lb-surface-2);font-size:3.4vw;font-weight:700}
+.lobby-tap{display:flex;flex-direction:column;align-items:center;gap:0;font-size:3vw;font-weight:700;color:var(--lb-orange)}
+.lobby-tap span{font-size:4vw;line-height:1;font-weight:300}
+.lobby-toast{position:absolute;left:50%;top:58svh;transform:translateX(-50%);padding:1.6svh 4vw;border:1px solid var(--lb-orange);border-radius:2vw;background:#2b2016f2;font-size:3.2vw;box-shadow:0 0 4vw #0009;z-index:5}
+.lobby-modal{position:absolute;inset:0;display:grid;place-items:center;background:#000a;z-index:10}
+.lobby-modal-box{width:76vw;padding:3svh 5vw;border:1px solid var(--lb-line);border-radius:2.4vw;background:#26262a;text-align:center}
+.lobby-modal-box h2{margin:0 0 1.6svh;font-size:4.4vw}
+.lobby-modal-box p{margin:0 0 2svh;font-size:3vw;line-height:1.35;color:#d7dbe2}
+.lobby-modal-actions{display:flex;justify-content:center;gap:3vw}
+.lobby-modal-actions button{min-width:22vw;min-height:7svh;border:0;border-radius:1.8vw;background:linear-gradient(180deg,#ff2b45,#c8102e);font-size:3.6vw;font-weight:800}
+.lobby-modal-actions button.secondary{background:var(--lb-surface-2);border:1px solid var(--lb-line)}
+/* Ball-Duel: 3 modes leave room, so the duel slots get the spare height. */
+.lobby-cols{flex:0 0 auto}
+.lobby-duel{flex:1 1 auto;display:flex;flex-direction:column}
+.lobby-slots{flex:1}
+.lobby-slot{min-height:22svh}
+.lobby-hex{width:18vw;height:19.8vw}
+.lobby-head{padding-right:72px}
+.lobby-launch-actions{display:grid;grid-template-columns:1fr 1fr;gap:2vw;width:100%}
+.lobby-modal-box .info-rings{justify-content:center;margin:1svh 0 2svh}
+.lobby-modal-box ol{margin:0 0 2svh;padding-left:5vw;text-align:left;font-size:2.8vw;line-height:1.35;color:#d7dbe2}
+/* Ball-Duel's language button (.lang) and device line follow the section in the DOM. */
+.lobby-screen~.lang{top:1.6svh;right:3vw;left:auto;bottom:auto;z-index:20}
+.lobby-screen~.lang .lang-menu{top:0;bottom:auto;right:0;left:auto;flex-direction:column}
+.lobby-screen~.device-status{top:auto;bottom:.4svh;right:3vw;font-size:11px;z-index:2}
