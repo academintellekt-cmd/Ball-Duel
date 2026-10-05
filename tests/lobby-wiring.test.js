@@ -11,4 +11,6 @@ assert(app.includes("status:'failed'")&&app.includes('not_enough_players'),'shor
 assert(!app.includes("state.phase==='menu'")&&!app.includes("state.phase==='duration'"),'old menu/duration screens removed');
 assert(control.includes('lobby.css')&&control.includes('../lib/lobby-options.js')&&control.includes('lobby.js'),'control page loads lobby files');
 assert(player.includes('../lib/lobby-options.js'),'player page loads lobby-options (state init)');
+assert(app.includes('finishToken'),'finish timers are token-guarded');
+assert(app.includes('if(token!==countdownToken)return;startGame()'),'countdown re-checks token before startGame');
 console.log('lobby wiring tests passed');
