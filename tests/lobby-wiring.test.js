@@ -1,0 +1,14 @@
+const assert=require('assert');const fs=require('fs');const path=require('path');
+const root=path.join(__dirname,'..');
+const app=fs.readFileSync(path.join(root,'public','app.js'),'utf8');
+const control=fs.readFileSync(path.join(root,'public','control.html'),'utf8');
+const player=fs.readFileSync(path.join(root,'public','player.html'),'utf8');
+assert(app.includes("phase:'lobby'"),'boots into the duel lobby');
+assert(app.includes('BallDuelLobby.html(lobbyView())'),'lobby phase renders the lobby screen');
+assert(app.includes("api.striveXLobby({type:'start'"),'START asks the Gateway to commit');
+assert((app.match(/lobbySelection[:=]LobbyOptions\.defaultSelection\(/g)||[]).length>=2,'selection resets between pairs');
+assert(app.includes("status:'failed'")&&app.includes('not_enough_players'),'short unlock answers failed');
+assert(!app.includes("state.phase==='menu'")&&!app.includes("state.phase==='duration'"),'old menu/duration screens removed');
+assert(control.includes('lobby.css')&&control.includes('../lib/lobby-options.js')&&control.includes('lobby.js'),'control page loads lobby files');
+assert(player.includes('../lib/lobby-options.js'),'player page loads lobby-options (state init)');
+console.log('lobby wiring tests passed');
