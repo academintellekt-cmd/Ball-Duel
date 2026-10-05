@@ -1,0 +1,18 @@
+const assert=require('assert');
+const O=require('../lib/lobby-options');
+const D=[3,1,2];
+assert.deepStrictEqual(O.LOBBY_MODES,['free','targets','values']);
+assert.deepStrictEqual(O.modeOptions('free',D),{difficulties:[],durations:[1,2,3]});
+assert.deepStrictEqual(O.modeOptions('targets',D),{difficulties:[],durations:[1,2,3]});
+assert.deepStrictEqual(O.modeOptions('values',D),{difficulties:['easy','medium','hard','extreme'],durations:[1,2,3]});
+assert.deepStrictEqual(O.defaultSelection('values',D),{mode:'values',variant:null,difficulty:'easy',durationMinutes:1});
+assert.deepStrictEqual(O.defaultSelection('free',D),{mode:'free',variant:null,difficulty:null,durationMinutes:1});
+assert.deepStrictEqual(O.defaultSelection('free',[]).durationMinutes,1);
+const sel=O.defaultSelection('free',D);
+assert.deepStrictEqual(O.canStart(sel,[{uid:'A'}],2,false),{ok:false,reason:'needPlayers'});
+assert.deepStrictEqual(O.canStart(sel,[{uid:'A'},{uid:'B'}],2,false),{ok:true,reason:null});
+assert.deepStrictEqual(O.canStart(sel,[],2,true),{ok:true,reason:null},'session mode starts locally');
+const names={modes:{free:'Свободная игра',targets:'Зелёные цели',values:'Ценные кольца'},difficulties:{easy:'Лёгкий',medium:'Средний',hard:'Сложный',extreme:'Экстрим'},minute:'мин'};
+assert.strictEqual(O.selectionLabel({mode:'values',variant:null,difficulty:'hard',durationMinutes:2},names),'Ценные кольца · Сложный · 2 мин');
+assert.strictEqual(O.selectionLabel(sel,names),'Свободная игра · 1 мин');
+console.log('lobby-options tests passed');
