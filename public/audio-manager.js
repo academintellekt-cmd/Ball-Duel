@@ -44,6 +44,19 @@ class LightningAudio {
     const audio=new Audio(bag.pop());audio.volume=this.config.effectsVolume??.85;audio.preload='auto';audio.play().catch(()=>{})
   }
   color(color){const file=this.config.colors?.[color];if(!file)return;const audio=new Audio(file);audio.volume=this.config.effectsVolume??.85;audio.play().catch(()=>{})}
+  pauseMusic(){
+    if(!this.enabled)return;
+    clearInterval(this.fadeTimer);this.fadeTimer=null;this.fadeToken++;this.duckToken++;
+    const name=this.current,audio=this.music[name];if(!audio)return;
+    this.stopExcept(name);audio.pause();this.pausedName=name;
+  }
+  resumeMusic(){
+    if(!this.enabled||!this.pausedName)return;
+    const name=this.pausedName;this.pausedName=null;
+    if(this.current!==name)return;
+    const audio=this.music[name];if(!audio)return;
+    audio.volume=this.musicTarget(name);this.safePlay(audio,name);
+  }
   crossfade(name,duration=this.config.fadeMs??1200){
     if(!this.enabled)return;
     clearInterval(this.fadeTimer);
@@ -66,3 +79,4 @@ class LightningAudio {
     step();this.fadeTimer=setInterval(step,40);
   }
 }
+if(typeof module!=='undefined'&&module.exports)module.exports={LightningAudio};

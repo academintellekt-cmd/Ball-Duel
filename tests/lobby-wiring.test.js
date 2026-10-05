@@ -17,4 +17,9 @@ assert(!app.includes('${state.names[')&&!app.includes('${r.name}'),'all names go
 assert(app.includes('pausedAt=performance.now()')&&app.includes('startedAt+=performance.now()-pausedAt'),'stop-confirm pauses the round');
 assert(/function captureActiveRound\(\)\{[^\n]*state\.previousPhase==='game'/.test(app),'captureActiveRound handles confirm over game');
 assert(app.includes("else{captureActiveRound();endSession('timeout')}"),'expiry outside game keeps the round');
+assert(app.includes("function abortGame(){if(sessionExpirePending){captureActiveRound();sessionExpirePending=false;endSession('timeout');return}"),'abort after expiry ends the session');
+const stopAct=(app.match(/action==='stop'\)\{[^}]*\}/)||[''])[0];
+assert(stopAct.includes('audio?.pauseMusic()')&&stopAct.includes('idleLeds()'),'stop pauses music and LEDs');
+const noAct=(app.match(/action==='confirm-no'\)\{.*?\}else\{/)||[''])[0];
+assert(noAct.includes('audio?.resumeMusic()')&&noAct.includes('syncLeds()'),'confirm-no resumes music and LEDs');
 console.log('lobby wiring tests passed');
