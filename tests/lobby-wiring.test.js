@@ -13,4 +13,8 @@ assert(control.includes('lobby.css')&&control.includes('../lib/lobby-options.js'
 assert(player.includes('../lib/lobby-options.js'),'player page loads lobby-options (state init)');
 assert(app.includes('finishToken'),'finish timers are token-guarded');
 assert(app.includes('if(token!==countdownToken)return;startGame()'),'countdown re-checks token before startGame');
+assert(!app.includes('${state.names[')&&!app.includes('${r.name}'),'all names go through esc(...)');
+assert(app.includes('pausedAt=performance.now()')&&app.includes('startedAt+=performance.now()-pausedAt'),'stop-confirm pauses the round');
+assert(/function captureActiveRound\(\)\{[^\n]*state\.previousPhase==='game'/.test(app),'captureActiveRound handles confirm over game');
+assert(app.includes("else{captureActiveRound();endSession('timeout')}"),'expiry outside game keeps the round');
 console.log('lobby wiring tests passed');
