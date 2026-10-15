@@ -22,4 +22,8 @@ const stopAct=(app.match(/action==='stop'\)\{[^}]*\}/)||[''])[0];
 assert(stopAct.includes('audio?.pauseMusic()')&&stopAct.includes('idleLeds()'),'stop pauses music and LEDs');
 const noAct=(app.match(/action==='confirm-no'\)\{.*?\}else\{/)||[''])[0];
 assert(noAct.includes('audio?.resumeMusic()')&&noAct.includes('syncLeds()'),'confirm-no resumes music and LEDs');
+assert(app.includes("if(e.type==='unlock'){startSession(e);if(state.sessionId)showEnterCall()}"),'a started session shows the enter call');
+assert(app.includes('syncEnterCall();'),'render closes the enter call once the phase moves on');
+assert(app.includes('ENTER_CALL_MS=10000')&&app.includes('setTimeout(hideEnterCall,ENTER_CALL_MS)'),'enter call lasts 10 s');
+assert(app.includes("function deviceStatus(){return role==='control'&&cfg.strivex?.developmentMode?"),'LED/HID line only in development mode');
 console.log('lobby wiring tests passed');
