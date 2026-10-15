@@ -82,3 +82,9 @@ button.lobby-row.lobby-pick{width:100%}
 .lobby-screen~.lang{top:1.6svh;right:3vw;left:auto;bottom:auto;z-index:20}
 .lobby-screen~.lang .lang-menu{top:0;bottom:auto;right:0;left:auto;flex-direction:column}
 .lobby-screen~.device-status{top:auto;bottom:.4svh;right:3vw;font-size:11px;z-index:2}
+
+/* Lava Jump call to enter: full screen for 10 s after a successful START. */
+.lobby-enter{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:#1c1c1e;color:#fe7800;cursor:pointer;animation:lobby-enter-in .25s ease-out}
+.lobby-enter b{font-size:clamp(56px,11vw,140px);font-weight:800;letter-spacing:.01em}
+@keyframes lobby-enter-in{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.lobby-enter{animation:none}}
