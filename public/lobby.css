@@ -88,3 +88,23 @@ button.lobby-row.lobby-pick{width:100%}
 .lobby-enter b{font-size:clamp(56px,11vw,140px);font-weight:800;letter-spacing:.01em}
 @keyframes lobby-enter-in{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){.lobby-enter{animation:none}}
+/* Lobby profile window (tap a player card). */
+.lobby-slot-open{display:flex;flex-direction:column;align-items:center;gap:1svh;background:none;border:0;padding:0;color:inherit;font:inherit;cursor:pointer}
+.lobby-slot-open b{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lobby-profile{width:min(86vw,760px);text-align:left}
+.lobby-profile-head{display:flex;align-items:center;gap:3vw;margin-bottom:2svh}
+.lobby-profile-head .lobby-hex{width:16vw;height:auto;flex:0 0 auto}
+.lobby-profile-id{flex:1;min-width:0}
+.lobby-profile-id h2{margin:0 0 .6svh;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lobby-profile-level{font-size:3vw;font-weight:800;color:#fe7800}
+.lobby-xp{height:1.2svh;margin:.8svh 0 .4svh;border-radius:99px;background:#3d3d42;overflow:hidden}
+.lobby-xp i{display:block;height:100%;background:linear-gradient(90deg,#fe7800,#ffb331)}
+.lobby-profile-id small{font-size:2.4vw;color:#9ea3ad}
+.lobby-profile-time{display:flex;align-items:baseline;flex-wrap:wrap;gap:1vw 2vw;padding:1.4svh 2vw;border:1px solid #3d3d42;border-radius:2vw;margin-bottom:1.6svh;font-size:3vw}
+.lobby-profile-time b{font-size:4vw}
+.lobby-profile-time small{flex-basis:100%;font-size:2.4vw;color:#9ea3ad}
+.lobby-profile h3{margin:1.6svh 0 .8svh;font-size:2.8vw;color:#9ea3ad;text-transform:uppercase;letter-spacing:.06em}
+.lobby-profile-list{list-style:none;margin:0;padding:0;max-height:22svh;overflow:auto}
+.lobby-profile-list li{display:flex;justify-content:space-between;gap:2vw;padding:.9svh 0;border-bottom:1px solid #2b2b2f;font-size:2.9vw}
+.lobby-profile-list li b{font-variant-numeric:tabular-nums}
+.lobby-profile-note{margin:.6svh 0 1svh;font-size:2.8vw;color:#9ea3ad}

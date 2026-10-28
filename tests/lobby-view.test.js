@@ -48,4 +48,15 @@ assert.strictEqual(L.enterHtml('ru'),'<div class="lobby-enter" data-lobby-enter 
 assert(L.enterHtml('en').includes('Come in'),'enter call is localized');
 html=L.html(view({overlay:{type:'denied',reason:'unregistered'}}));
 assert(html.includes('Данный браслет не найден в системе. Обратитесь к администратору.'),'Lava Jump wording for an unknown wristband');
+// Lobby profile window.
+const duo=[{uid:'A',name:'Алекс',avatar:'X1'},{uid:'B',name:'Мира',avatar:'X2'}];
+html=L.html(view({players:duo}));
+assert(html.includes('data-lobby-profile="A"')&&html.includes('data-lobby-profile="B"'),'player cards open the profile');
+const data={username:'Алекс',level:3,xp_in_level:120,needed_xp:500,time_started:true,remaining_seconds:125,records:[{mode_id:'values',level_id:'hard:2',best_score:42},{mode_id:'free',level_id:'-:1',best_score:17}],recent:[]};
+html=L.html(view({players:duo,overlay:{type:'profile',uid:'A',state:'ready',data}}));
+assert(html.includes('Уровень 3')&&html.includes('2:05'),'level and time');
+assert(html.includes('Ценные кольца · Сложный · 2 мин')&&html.includes('Свободная игра · 1 мин'),'records name mode, difficulty and time');
+assert(html.includes('data-lobby-profile-remove="A"')&&html.includes('Закрыть'),'remove and close');
+html=L.html(view({players:duo,session:true,overlay:{type:'profile',uid:'A',state:'ready',data}}));
+assert(!html.includes('data-lobby-profile-remove'),'no removing a player during a paid session');
 console.log('lobby-view tests passed');
