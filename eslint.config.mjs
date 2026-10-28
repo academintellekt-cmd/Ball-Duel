@@ -7,6 +7,7 @@ import { defineConfig } from 'eslint/config';
 const pageGlobals = {
   LightningAudio: 'readonly',
   LobbyOptions: 'readonly',
+  SessionRecords: 'readonly',
   BallDuelLobby: 'readonly',
   BallDuelEngine: 'readonly',
 };
