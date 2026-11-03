@@ -29,6 +29,7 @@
   };
   const AVATAR={X1:['bolt','orange'],X2:['star','purple'],X3:['diamond','cyan'],X4:['flame','red'],X5:['crown','gold'],X6:['target','green']};
   function avatar(player,slot){
+    const catalog=root.StrivexCabinet?.avatar(player.avatar,'lobby-hex lobby-avatar');if(catalog)return catalog;
     const known=AVATAR[player.avatar],icon=known?known[0]:'bolt',color=known?known[1]:(slot===0?'blue':'orange');
     return`<svg class="lobby-hex hex-${color}" viewBox="0 0 100 110" aria-hidden="true"><polygon points="50,4 95,29 95,81 50,106 5,81 5,29" fill="none" stroke="currentColor" stroke-width="6"/><g transform="translate(26 31) scale(2)" fill="currentColor">${ICON[icon]}</g></svg>`;
   }
@@ -72,6 +73,8 @@
   function recordLabel(r,v){const[diff,mins]=String(r.level_id||'').split(':');const parts=[v.names?.modes?.[r.mode_id]||r.mode_id];if(diff&&diff!=='-')parts.push(v.names?.difficulties?.[diff]||diff);if(mins&&mins!=='-')parts.push(`${mins} ${v.names?.minute||'min'}`);return parts.join(' · ')}
   function profile(v,s,o){
     const i=Math.max(0,v.players.findIndex(p=>p.uid===o.uid)),p=v.players[i]||{uid:o.uid,name:''},d=o.state==='ready'?o.data:null;
+    // Full player cabinet (cabinet.js); the small window below is the fallback.
+    if(root.StrivexCabinet)return root.StrivexCabinet.html(o,{lang:v.lang,session:v.session,gameId:'ball-duel',gameName:'Ball Duel',player:p,fallbackAvatar:avatar(p,i),recordLabel:r=>recordLabel(r,v)});
     const head=`<div class="lobby-profile-head">${avatar(p,i)}<div class="lobby-profile-id"><h2>${esc(d?.username||p.name)}</h2>${d?`<div class="lobby-profile-level">${esc(s.level)} ${num(d.level)}</div><div class="lobby-xp"><i style="width:${Math.max(0,Math.min(100,Math.round(100*Number(d.xp_in_level||0)/Math.max(1,Number(d.needed_xp||1)))))}%"></i></div><small>${num(d.xp_in_level)} / ${num(d.needed_xp)} XP</small>`:''}</div></div>`;
     let body;
     if(o.state==='loading')body=`<p class="lobby-profile-note">${esc(s.profileLoading)}</p>`;

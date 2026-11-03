@@ -1,0 +1,143 @@
+/* Player cabinet (see cabinet.js). Full screen over the lobby, same layout and
+   palette as the Lava Jump station cabinet (guest-design.css), sized for a
+   1080x1920 portrait touch screen. */
+.cab-screen{--cb-panel:#272d30;--cb-border:#465056;--cb-text:#f5f7f8;--cb-muted:#bbc8d3;--cb-orange:#fe7800;--cb-card:#30383c;
+  position:absolute;inset:0;z-index:12;display:flex;flex-direction:column;gap:clamp(8px,.9vh,18px);padding:clamp(12px,2.3vh,36px);
+  background:radial-gradient(ellipse at 25% 5%,#4c52562b,transparent 55%),radial-gradient(ellipse at 90% 80%,#fe780009,transparent 60%),#191e21;
+  color:var(--cb-text);font-family:'Involve','Inter','Segoe UI',Arial,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.cab-screen :where(button){font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cab-screen h1,.cab-screen h2,.cab-screen h3{font-family:inherit;font-weight:700;letter-spacing:0;text-transform:none}
+.cab-i{width:1.5em;height:1.5em;flex-shrink:0}
+.cab-attraction{flex-shrink:0;padding:clamp(10px,1.4vh,26px) 12% 0;text-align:center}
+.cab-attraction p{margin:0 0 10px;font-size:clamp(17px,1.8vh,30px);font-weight:700;color:#74df83}
+.cab-attraction p.busy{color:#ffb968}
+.cab-screen .cab-attraction h1{margin:0;font-size:clamp(24px,3.8vw,46px);line-height:1.15;text-transform:uppercase}
+.cab-identity,.cab-main{background:linear-gradient(120deg,#303538,#22292c);border:1px solid var(--cb-border);border-radius:24px;box-shadow:inset 0 1px 0 #ffffff08}
+.cab-identity{display:flex;align-items:center;gap:32px;flex:0 0 auto;padding:18px 30px}
+.cab-avatar{flex:0 0 auto;display:block;width:clamp(94px,17vw,190px);aspect-ratio:1}
+.cab-avatar .avatar,.cab-mini .avatar{width:100%;height:100%}
+/* Lava Jump avatar look over the customer's renderer (vendor/ stays unchanged):
+   frames 1-8 at full size with a thicker line, icons larger, glowing frame and icon.
+   Each layer's color attribute is its currentColor. */
+:is(.cab-screen,.lobby-avatar) .frame-layer>g[transform]{transform:none;stroke-width:5}
+:is(.cab-screen,.lobby-avatar) .icon-layer>g{transform:translate(26px,26px) scale(2)}
+:is(.cab-avatar,.lobby-avatar) :is(.frame-layer,.icon-layer){filter:drop-shadow(0 0 2px currentColor) drop-shadow(0 0 7px currentColor)}
+.cab-identity>.lobby-hex{flex:0 0 auto;width:clamp(94px,17vw,190px);height:auto}
+.cab-identity-copy{flex:1;min-width:0}
+.cab-screen .cab-identity h2{margin:0 0 8px;font-size:clamp(30px,4.8vw,58px);line-height:1.1;overflow-wrap:anywhere}
+.cab-identity strong{font-size:clamp(20px,2.7vw,30px)}
+.cab-progress{height:14px;border-radius:20px;background:#454e54;overflow:hidden}
+.cab-progress i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ff9a00,#fe7800)}
+.cab-identity .cab-progress{height:22px;margin:14px 0 4px}
+.cab-progress.big{flex-basis:100%;height:26px}
+.cab-xp-caption{display:flex;justify-content:space-between;gap:10px;font-size:clamp(12px,1.7vw,21px);color:var(--cb-muted)}
+.cab-main{flex:1;min-height:0;display:flex;flex-direction:column;gap:16px;padding:clamp(16px,2.6vw,32px);overflow:hidden}
+.cab-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-shrink:0}
+.cab-screen .cab-panel-heading h2{margin:0;font-size:clamp(24px,3.6vw,43px)}
+.cab-timer{display:flex;align-items:center;gap:10px;white-space:nowrap;font-size:clamp(16px,2.4vw,28px);color:var(--cb-muted)}
+.cab-timer b{font-weight:400;font-variant-numeric:tabular-nums}
+.cab-subtitle{margin:0;font-size:24px;color:var(--cb-muted)}
+.cab-empty{margin:0;padding:24px 0;font-size:24px;color:var(--cb-muted)}
+.cab-scroll{flex:1;min-height:0;overflow-y:auto;scrollbar-color:#fe7800 #414c52;scrollbar-width:thin;overscroll-behavior:contain}
+/* Обзор */
+.cab-highlights{display:grid;grid-template-columns:1fr 1fr;flex:1;align-items:stretch;padding:24px 0;border-bottom:1px solid var(--cb-border)}
+.cab-highlights button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:0 12px;border:0;background:none;color:#fff;font-size:26px;text-align:center}
+.cab-highlights button+button{border-left:1px solid var(--cb-border)}
+.cab-highlights .cab-i{width:86px;height:86px;color:var(--cb-orange)}
+.cab-highlights strong{font-size:100px;line-height:1;color:var(--cb-orange);font-variant-numeric:tabular-nums}
+.cab-highlights b{font-size:30px}
+.cab-highlights small{font-size:22px;color:var(--cb-muted)}
+.cab-time{display:flex;align-items:center;flex-wrap:wrap;gap:22px;padding:30px 16px}
+.cab-time>.cab-i{width:66px;height:66px}
+.cab-time>div{flex:1;font-size:28px}
+.cab-time span{display:block}
+.cab-time b{display:inline-block;margin-right:28px;font-size:76px;font-variant-numeric:tabular-nums}
+.cab-time small{font-size:24px;color:var(--cb-muted)}
+/* Рекорды / Награды: segmented switch */
+.cab-segments{display:flex;flex-shrink:0;border:1px solid var(--cb-border);border-radius:14px;overflow:hidden}
+.cab-segments button{flex:1;min-height:72px;padding:10px;border:0;background:#30373b;color:#d4dde3;font-size:26px}
+.cab-segments button[aria-pressed=true]{background:var(--cb-orange);color:#151b1f;font-weight:700}
+.cab-mode{flex-shrink:0;padding:14px 22px;border:1px solid var(--cb-border);border-radius:14px;font-size:21px;color:var(--cb-muted)}
+.cab-mode strong{display:block;margin-top:6px;font-size:28px;color:#fff}
+.cab-mode-chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.cab-mode-chips button{padding:10px 18px;border:1px solid #637078;border-radius:12px;background:#252d31;color:#cfd6dc;font-size:22px}
+.cab-mode-chips button[aria-pressed=true]{outline:3px solid var(--cb-orange);outline-offset:-3px;color:var(--cb-orange);background:#fe780009;font-weight:700}
+.cab-record-best{display:flex;align-items:center;gap:26px;flex-shrink:0;padding:12px 20px 24px;border-bottom:1px solid var(--cb-border)}
+.cab-record-best>.cab-i{width:94px;height:94px;color:var(--cb-orange)}
+.cab-record-best>div{flex:1}
+.cab-record-best span,.cab-record-best small{display:block;font-size:24px}
+.cab-record-best strong{display:block;font-size:clamp(48px,9vw,100px);line-height:1.1;color:var(--cb-orange);font-variant-numeric:tabular-nums}
+.cab-record-best aside{padding:20px;border-left:1px solid var(--cb-border);font-size:24px;line-height:1.8}
+.cab-record-best aside small{font-size:20px;color:var(--cb-muted)}
+.cab-screen .cab-attempts-heading{margin:0;font-size:28px}
+.cab-attempts table{width:100%;border-collapse:collapse;font-size:28px;text-align:center}
+.cab-attempts th{position:sticky;top:0;z-index:1;background:#30383d;color:var(--cb-muted);font-size:22px;font-weight:400;text-transform:uppercase}
+.cab-attempts :is(th,td){padding:16px 8px;border-bottom:1px solid var(--cb-border);font-variant-numeric:tabular-nums}
+.cab-attempts .best{color:var(--cb-orange);font-weight:700}
+.cab-attraction-list{display:grid;align-content:start;gap:16px;padding-right:10px}
+.cab-attraction-record{display:flex;align-items:center;gap:24px;min-height:150px;padding:28px 22px;border:1px solid var(--cb-border);border-radius:18px;background:#30373b;font-size:27px}
+.cab-attraction-record>.cab-i{width:70px;height:70px;color:var(--cb-orange)}
+.cab-attraction-record>span:first-of-type{flex:1;min-width:0}
+.cab-attraction-record small,.cab-attraction-record em{display:block;margin-top:6px;font-size:21px;font-style:normal;color:var(--cb-muted)}
+.cab-attraction-record em{color:var(--cb-orange)}
+.cab-attraction-score{text-align:center}
+.cab-attraction-score b{font-size:42px;color:var(--cb-orange)}
+/* Награды */
+.cab-reward-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-content:start;padding-right:10px}
+.cab-reward-card{display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-height:265px;padding:24px;border:1px solid var(--cb-border);border-radius:20px;background:var(--cb-card);text-align:left}
+.cab-reward-art{position:relative;color:var(--cb-orange)}
+.cab-reward-art>.cab-i:first-child{width:75px;height:75px}
+.cab-reward-art>.cab-i+.cab-i{position:absolute;right:-18px;bottom:0;width:24px;height:24px;color:#ddd}
+.cab-reward-card.locked .cab-reward-art{color:#939fa6}
+.cab-screen .cab-reward-card h3{margin:0;font-size:27px}
+.cab-reward-card small{font-size:20px;color:var(--cb-muted)}
+.cab-reward-card .cab-progress{width:100%}
+.cab-reward-earned{font-size:23px;color:#78e583}
+/* Профиль */
+.cab-editor{display:flex;flex-direction:column;gap:12px;flex:1;min-height:0}
+.cab-screen .cab-editor>h3{margin:0;font-size:27px}
+.cab-choices{display:flex;flex-direction:column;gap:12px;padding-right:6px}
+.cab-choice{display:grid;grid-template-columns:180px minmax(0,1fr);gap:16px;align-items:center}
+.cab-screen .cab-choice h3{margin:0;font-size:23px}
+.cab-strip{display:flex;gap:14px;padding:4px 4px 10px;overflow-x:auto;overflow-y:hidden;scrollbar-color:#fe7800 #414c52;scrollbar-width:thin;overscroll-behavior-x:contain;scroll-snap-type:x proximity}
+.cab-strip button{position:relative;flex:0 0 clamp(82px,12vw,140px);min-height:64px;padding:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1px solid #637078;border-radius:14px;background:#252d31;color:#cfd6dc;scroll-snap-align:start}
+.cab-strip button[aria-pressed=true]{outline:3px solid var(--cb-orange);outline-offset:-3px;color:var(--cb-orange);background:#fe780009}
+.cab-strip button:disabled{cursor:default}
+.cab-strip button:disabled>.cab-mini,.cab-strip button:disabled>.cab-swatch{opacity:.45}
+.cab-mini{display:block;width:64px;height:64px}
+.cab-strip small{max-width:100%;overflow:hidden;font-size:17px;text-overflow:ellipsis;white-space:nowrap}
+.cab-swatch{width:52px;height:52px;border-radius:50%;box-shadow:inset 0 0 0 1px #ffffff44}
+.cab-lock{display:flex;align-items:center;justify-content:center;gap:4px;max-width:100%;font-size:15px;color:#ddd;white-space:nowrap;overflow:hidden}
+.cab-lock .cab-i{width:16px;height:16px}
+.cab-check{display:none;position:absolute;top:4px;right:6px;font-size:17px}
+[aria-pressed=true]>.cab-check{display:block}
+.cab-save{flex-shrink:0;min-height:62px;border:0;border-radius:12px;background:var(--cb-orange);color:#141a1d;font-size:25px;font-weight:700}
+.cab-save:disabled{opacity:.45}
+.cab-save-notice{margin:0;text-align:center;font-size:22px;color:#78e583}
+.cab-save-notice.error{color:#ff6b6b}
+.cab-history-toggle{display:flex;align-items:center;gap:16px;flex-shrink:0;width:100%;min-height:64px;padding:10px 16px;border:1px solid var(--cb-border);border-radius:14px;background:#30373c;color:#fff;font-size:26px;text-align:left}
+.cab-history-toggle>.cab-i:last-child{margin-left:auto;width:24px}
+.cab-history{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-content:start}
+.cab-history>div{display:flex;flex-direction:column;justify-content:center;gap:16px;padding:28px;border-radius:18px;background:var(--cb-card)}
+.cab-history strong{font-size:42px;color:var(--cb-orange)}
+.cab-history span{font-size:24px}
+.cab-history p{grid-column:1/-1;margin:0;font-size:24px;line-height:1.6}
+/* Tab bar and footer */
+.cab-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;flex-shrink:0}
+.cab-tabs button{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:clamp(70px,8.2vh,156px);padding:14px 6px;border:1px solid var(--cb-border);border-radius:22px;background:linear-gradient(130deg,#303639,#20272a);color:#fff;font-size:clamp(17px,2.9vw,33px);overflow:hidden}
+.cab-tabs .cab-i{width:1.8em;height:1.8em}
+.cab-tabs button[aria-pressed=true] .cab-i{color:var(--cb-orange)}
+.cab-tabs button[aria-pressed=true]:after{content:'';position:absolute;left:0;right:0;bottom:0;height:9px;background:var(--cb-orange)}
+.cab-footer{display:grid;gap:12px;flex-shrink:0}
+.cab-footer button{display:flex;align-items:center;justify-content:center;gap:20px;min-height:clamp(50px,5.4vh,102px);border:1px solid #505b62;border-radius:22px;background:linear-gradient(120deg,#3c4247,#30373c);color:#fff;font:700 clamp(20px,3.3vw,38px)/1.2 'Involve','Inter','Segoe UI',Arial,sans-serif}
+.cab-footer .cab-back{border-color:#d80031;background:linear-gradient(100deg,#d80031,#c1032a)}
+/* «Выйти» confirmation */
+.cab-dialog-backdrop{position:absolute;inset:0;z-index:2;display:grid;place-items:center;background:#070b0fd9;backdrop-filter:blur(6px)}
+.cab-dialog{width:min(760px,90vw);padding:38px;border:1px solid #66717a;border-radius:22px;background:#272e32;text-align:center}
+.cab-dialog h2{margin:0 0 28px;font-size:34px}
+.cab-dialog-actions{display:flex;gap:18px}
+.cab-dialog-actions button{flex:1;min-height:72px;border:0;border-radius:12px;background:var(--cb-orange);color:#171c20;font-size:26px;font-weight:700}
+.cab-dialog-actions button.secondary{border:1px solid var(--cb-border);background:#30373c;color:#fff}
+/* Lobby slots draw the catalog avatar instead of the hexagon when the player has one. */
+.lobby-avatar{display:block;filter:none!important}
+.lobby-avatar .avatar{width:100%;height:100%}
