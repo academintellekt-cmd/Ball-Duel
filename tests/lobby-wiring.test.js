@@ -26,4 +26,11 @@ assert(app.includes("if(e.type==='unlock'){startSession(e);if(state.sessionId)sh
 assert(app.includes('syncEnterCall();'),'render closes the enter call once the phase moves on');
 assert(app.includes('ENTER_CALL_MS=10000')&&app.includes('setTimeout(hideEnterCall,ENTER_CALL_MS)'),'enter call lasts 10 s');
 assert(app.includes("function deviceStatus(){return role==='control'&&cfg.strivex?.developmentMode?"),'LED/HID line only in development mode');
+assert(control.includes('../lib/session-records.js'),'control page loads session-records');
+assert(app.includes("records:SessionRecords.bestRecords(state.userIds,sessionRounds,'ball-duel',"),'session end reports XP records');
+assert(app.includes("setLobbyOverlay({type:'profile',uid:profile,state:'loading'},30000);api.striveXLobby({type:'profile',uid:profile})"),'tapping a card asks for the profile');
+assert(app.includes("else if(e.type==='profile'){if(lobbyOverlay?.type==='profile'&&lobbyOverlay.uid===e.uid)"),'only the open profile is filled in');
+assert(app.indexOf('data-lobby-profile-remove')<app.indexOf("if(at('data-lobby-dismiss')&&"),'remove inside the profile window is handled before its backdrop closes it');
+const main=fs.readFileSync(path.join(root,'main.js'),'utf8');
+assert(main.includes("strivex.on('profile',x=>emit('strivex-event',{type:'profile',...x}))")&&main.includes("x?.type==='profile'&&typeof strivex.requestProfile==='function'"),'main forwards profile requests and answers');
 console.log('lobby wiring tests passed');
