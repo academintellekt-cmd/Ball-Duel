@@ -8,7 +8,7 @@ const C=require(path.join(pub,'cabinet.js'));
 // ru-RU number grouping uses a no-break space.
 const html=(...a)=>C.html(...a).replace(/[\u00a0\u202f]/g,' ');
 
-const data={uid:'B1',username:'Алекс',avatar:{icon:'bolt',halo:'spark'},level:2,total_xp:350,xp_in_level:50,needed_xp:400,xp_to_next:350,time_started:false,remaining_seconds:1800,
+const data={uid:'B1',username:'Алекс',avatar:{icon:'bolt',halo:'spark'},paid_seconds:3600,level:2,total_xp:350,xp_in_level:50,needed_xp:400,xp_to_next:350,time_started:false,remaining_seconds:1800,
   records:[{mode_id:'tnt',level_id:'hard',best_score:5526,updated_at:'2026-11-03 09:00:00'}],
   all_records:[{game_id:'tnt',mode_id:'tnt',level_id:'hard',best_score:5526},{game_id:'color-duel',mode_id:'rhythm',level_id:'easy:2',best_score:40}],
   attempts:[{mode_id:'tnt',level_id:'hard',score:5526,is_record:1,created_at:'2026-11-03 09:00:00'},{mode_id:'tnt',level_id:'hard',score:4000,is_record:0,created_at:'2026-11-03 08:00:00'}],
@@ -28,12 +28,12 @@ h=html(open,ctx);
 assert(h.includes('Уровень 2')&&h.includes('50 / 400 XP')&&h.includes('До уровня 3 — 350 XP'),'player card');
 assert(h.includes('30:00')&&h.includes('время пойдёт с первой игры'),'paid time before the first game');
 assert(h.includes('5 526'),'best result');
-assert(h.includes('Последнее достижение')&&h.includes('Ближайшая награда')&&h.includes('Исследователь'));
-assert.strictEqual((h.match(/data-cab="tab:/g)||[]).length,4,'four tabs');
+assert(h.includes('Мой обзор')&&h.includes('Последнее достижение')&&h.includes('Ореол «Неон»'),'latest achievement is the later one of a tie');
+assert.strictEqual((h.match(/aria-pressed="(true|false)" data-cab="tab:/g)||[]).length,4,'four tabs');
 assert(!html(open,{...ctx,session:true}).includes('data-cab="exit"'),'no leave button during a game');
 
 let o=tap(open,'tab:records').overlay;h=html(o,ctx);
-assert(h.includes('Личный рекорд')&&h.includes('Последние 10 попыток')&&h.includes('4 000')&&h.includes('cab-badge'),'records tab');
+assert(h.includes('Личный рекорд')&&h.includes('Последние 10 попыток')&&h.includes('4 000')&&h.includes('<td class="best">5 526'),'records tab marks the best attempt');
 h=html(tap(o,'seg:all').overlay,ctx);
 assert(h.includes('Color Duel')&&h.includes('Ритм · Лёгкий · 2 мин'),'all attractions use built-in names');
 
@@ -55,7 +55,7 @@ o=C.saved(r.overlay,{uid:'B1',avatar:{icon:'bolt',halo:'neon'}});
 assert.strictEqual(o.data.avatar.halo,'neon');assert(html(o,ctx).includes('Оформление сохранено'));
 assert.strictEqual(C.saved(r.overlay,{uid:'B1',error:'locked'}).saveResult,'locked');
 h=html({...open,tab:'profile',history:true},ctx);
-assert(h.includes('1 ч 30 мин')&&h.includes('1 / 4'),'history and statistics');
+assert(h.includes('1 ч 30 мин')&&h.includes('1 из 4')&&!h.includes('data-cab="save"'),'history replaces the editor');
 
 assert.deepStrictEqual(tap(open,'back'),{close:true});
 assert(tap(open,'exit').overlay.confirmExit);
