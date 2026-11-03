@@ -28,9 +28,11 @@ assert(app.includes('ENTER_CALL_MS=10000')&&app.includes('setTimeout(hideEnterCa
 assert(app.includes("function deviceStatus(){return role==='control'&&cfg.strivex?.developmentMode?"),'LED/HID line only in development mode');
 assert(control.includes('../lib/session-records.js'),'control page loads session-records');
 assert(app.includes("records:SessionRecords.bestRecords(state.userIds,sessionRounds,'ball-duel',"),'session end reports XP records');
-assert(app.includes("setLobbyOverlay({type:'profile',uid:profile,state:'loading'},30000);api.striveXLobby({type:'profile',uid:profile})"),'tapping a card asks for the profile');
+assert(app.includes("setLobbyOverlay({type:'profile',uid:profile,state:'loading'},CABINET_IDLE_MS);api.striveXLobby({type:'profile',uid:profile})"),'tapping a card asks for the profile');
 assert(app.includes("else if(e.type==='profile'){if(lobbyOverlay?.type==='profile'&&lobbyOverlay.uid===e.uid)"),'only the open profile is filled in');
 assert(app.indexOf('data-lobby-profile-remove')<app.indexOf("if(at('data-lobby-dismiss')&&"),'remove inside the profile window is handled before its backdrop closes it');
 const main=fs.readFileSync(path.join(root,'main.js'),'utf8');
 assert(main.includes("strivex.on('profile',x=>emit('strivex-event',{type:'profile',...x}))")&&main.includes("x?.type==='profile'&&typeof strivex.requestProfile==='function'"),'main forwards profile requests and answers');
+assert(main.includes("strivex.on('avatar-saved',x=>emit('strivex-event',{type:'avatar_saved',...x}))")&&main.includes("x?.type==='avatar_save'&&typeof strivex.saveAvatar==='function'"),'main forwards avatar saves and answers');
+assert(app.indexOf('StrivexCabinet.click(e.target,lobbyOverlay)')<app.indexOf("const idle=at('data-lobby-idle')")&&app.includes("api.striveXLobby({type:'avatar_save',uid:r.save.uid,avatar:r.save.avatar})"),'cabinet taps are handled first and saves go to the Gateway');
 console.log('lobby wiring tests passed');
