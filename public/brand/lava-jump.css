@@ -1,0 +1,27 @@
+@import url('./tokens.css');
+
+/* Lava Jump brand layer, after lava-jump game-modules/lightning brand/lightning.css. Loaded last.
+   Chrome only: blue/orange stay as stand colours (they match the physical stands), ring colours keep their meaning. */
+html body { background: var(--bg) !important; color: var(--white); font-family: var(--font-body); }
+body :is(.screen,.bd-screen) { background: var(--bg) !important; }
+body :is(.brand,.ball-brand) { font-family: var(--font-display) !important; font-weight: 700 !important; font-style: normal !important; color: var(--white) !important; letter-spacing: 0 !important; text-shadow: none !important; }
+body :is(h1,h2,h3):not(:is(.lobby-screen,.cab-screen) *) { font-family: var(--font-display); font-weight: 700; letter-spacing: 0; text-shadow: none; }
+body :is(button,input,select) { font-family: var(--font-body); }
+
+body :is(.btn,.bd-btn) { background: var(--gold) !important; border: 2px solid var(--gold) !important; color: var(--ink) !important; border-radius: 0 !important; font-weight: 600; letter-spacing: 0; box-shadow: none !important; }
+body :is(.btn,.bd-btn):hover:not(:disabled) { background: #ef780d !important; }
+body :is(.btn.orange,.bd-btn.orange) { background: transparent !important; border-color: #64646b !important; color: var(--white) !important; }
+body :is(.back,.quit,.session-exit,.stop-game,.lang>button,.info-dot,.help-btn) { border: 1px solid #64646b !important; border-radius: 0 !important; background: transparent !important; color: var(--white) !important; box-shadow: none !important; }
+body .lang-menu { border: 1px solid var(--line) !important; border-radius: 0 !important; background: var(--surface) !important; }
+body .lang img { border-radius: 0; }
+
+/* Stands keep their blue/orange border (currentColor); only the glow and the rounded card go. */
+body .stand { border-radius: 0 !important; background: var(--surface) !important; box-shadow: none !important; }
+body .stand :is(h2,.stand-score) { color: var(--white); }
+body :is(.result-cards>div,.info-panel,.player,.scores>div,.info-card) { border-radius: 0 !important; background: var(--surface) !important; box-shadow: none !important; }
+body :is(.game-timer,.timer) { color: var(--gold) !important; text-shadow: none !important; }
+body :is(.game-timer,.timer,.stand-score,.result-cards b,.countdown,.gameover) { font-family: var(--font-display); font-weight: 700; font-variant-numeric: tabular-nums; }
+body :is(.change-timer,.subtitle) { color: var(--muted); opacity: 1; }
+body :is(th,td) { border-bottom-color: var(--line) !important; }
+
+body :is(button,a):focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
