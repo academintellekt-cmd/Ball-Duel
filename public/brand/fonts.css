@@ -1,0 +1,4 @@
+/* Lava Jump brand fonts (EN Brandbook, copied from lava-jump/apps/server/public/assets/brand). */
+@font-face { font-family: 'Bowler'; src: url('./fonts/BOWLER.otf') format('opentype'); font-weight: 400 900; font-display: swap; }
+@font-face { font-family: 'Involve'; src: url('./fonts/Involve-Regular.ttf') format('truetype'); font-weight: 400 500; font-display: swap; }
+@font-face { font-family: 'Involve'; src: url('./fonts/Involve-Bold.ttf') format('truetype'); font-weight: 600 900; font-display: swap; }

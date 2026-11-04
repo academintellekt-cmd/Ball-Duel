@@ -1,0 +1,22 @@
+@import url('./fonts.css');
+
+/* Lava Jump — EN Brandbook, pages 12–17. Legacy color aliases preserve existing components. */
+:root {
+  color-scheme: dark;
+  --font-body: 'Involve', Arial, sans-serif;
+  --font-display: 'Bowler', 'Involve', Arial, sans-serif;
+  --bg: #1c1c1e;
+  --surface: #272729;
+  --surface-2: #2d2d2d;
+  --surface-3: #2d2d2d;
+  --panel: #272729;
+  --line: #464649;
+  --gold: #fe7800;
+  --gold-bright: #fe7800;
+  --amber: #fe7800;
+  --white: #ffffff;
+  --muted: #bdbdc5;
+  --ink: #1c1c1e;
+  --radius: 0px;
+  --shadow-gold: none;
+}
