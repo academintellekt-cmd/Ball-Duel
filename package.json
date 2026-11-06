@@ -8,7 +8,10 @@
     "start": "electron .",
     "lint": "eslint .",
     "check": "eslint . && node --check main.js && node --check preload.js && node --check public/app.js && node --test tests/*.test.js",
-    "build": "electron-builder --win nsis"
+    "build": "electron-builder --win nsis",
+    "design": "node scripts/start-design.js",
+    "check:technician": "electron scripts/check-technician.js",
+    "check:led-layout": "node scripts/check-led-layout.js"
   },
   "dependencies": {
     "@serialport/parser-readline": "^13.0.0",
