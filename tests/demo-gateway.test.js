@@ -91,3 +91,10 @@ test('collecting idles out; cancel clears the queue',async()=>{
   gw.queueCancel();assert.equal(seen.filter(x=>x.type==='queue').at(-1).state,'none');
   gw.stop();
 });
+test('preview reset clears the queue on the control screen too',()=>{
+  const gw=new DemoGateway();const seen=collectQueue(gw);startSession(gw);
+  gw.queueOpen();gw.tap('333');assert.equal(seen.filter(x=>x.type==='queue').at(-1).state,'collecting');
+  gw.resetPreview();assert.equal(seen.filter(x=>x.type==='queue').at(-1).state,'none');
+  const before=seen.length;gw.resetPreview();assert.equal(seen.slice(before).filter(x=>x.type==='queue').length,0,'no repeat when already empty');
+  gw.stop();
+});

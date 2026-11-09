@@ -34,3 +34,33 @@ assert(main.includes("strivex.on('profile',x=>emit('strivex-event',{type:'profil
 assert(main.includes("strivex.on('avatar-saved',x=>emit('strivex-event',{type:'avatar_saved',...x}))")&&main.includes("x?.type==='avatar_save'&&typeof strivex.saveAvatar==='function'"),'main forwards avatar saves and answers');
 assert(app.indexOf('StrivexCabinet.click(e.target,lobbyOverlay)')<app.indexOf("const idle=at('data-lobby-idle')")&&app.includes("api.striveXLobby({type:'avatar_save',uid:r.save.uid,avatar:r.save.avatar})"),'cabinet taps are handled first and saves go to the Gateway');
 console.log('lobby wiring tests passed');
+const test=require('node:test');
+test('main forwards queue events and commands',()=>{
+  assert(main.includes("for(const type of['unlock','lock','expired','lobby','scan','queue'])strivex.on(type,x=>emit('strivex-event',{type,...x}))"),'queue event reaches the control screen');
+  for(const[type,method]of[['queue_open','queueOpen'],['queue_done','queueDone'],['queue_cancel','queueCancel']])assert(main.includes(`x?.type==='${type}'&&typeof strivex.${method}==='function')strivex.${method}()`),`${type} -> strivex.${method}()`);
+});
+test('control screen renders the queue bar in the game phase',()=>{
+  assert(/function queueBar\(\)\{[^\n]*BallDuelLobby\.queue\(queueView\(\)\)/.test(app),'queueBar renders BallDuelLobby.queue');
+  assert(app.includes("app.innerHTML=html+(state.phase==='lobby'?'':queueBar())+language()+deviceStatus()"),'every non-lobby control phase (game, countdown, gameover, results, leaderboard) gets the bar');
+  assert(app.includes("const bar=app.querySelector('.control-queue'),screen=app.querySelector('.bd-screen');if(bar&&screen)screen.style.paddingBottom=`${Math.ceil(innerHeight-bar.getBoundingClientRect().top)+12}px`"),'the screen content keeps clear of the strip (result cards, leaderboard)');
+  assert(/function queueShown\(\)\{if\(state\.phase==='confirm'\)return false;return!!state\.sessionId\|\|state\.phase==='lobby'&&queue\?\.state==='reserved'\}/.test(app),'shown during the session except on confirm; after it only reserved in the lobby');
+  assert(app.includes('queue:queueShown()?queueView():null'),'session lobby embeds the bar');
+  const css=fs.readFileSync(path.join(root,'public','lobby.css'),'utf8');
+  assert(css.includes('.lobby-screen,.control-queue{--lb-')&&css.includes('.control-queue{position:absolute;left:4vw;right:4vw;bottom:calc(3vh + 76px)'),'outside the lobby the strip has the lobby colours and sits above the bottom button row');
+  assert(css.includes('.lobby-queue.reserved .lobby-queue-info b{white-space:normal'),'reserved names wrap so the call to tap is never clipped');
+  assert(app.includes('remainingSec:queue?.expires_at==null?null:Math.max(0,Math.ceil((queue.expires_at-Date.now())/1000))')&&app.includes("canOpen:!!state.sessionId&&(queue?.state||'none')==='none'"),'queueView remaining seconds and canOpen');
+});
+test('queue buttons send their commands',()=>{
+  assert(app.includes("const QUEUE_ACTIONS={'queue-open':'queue_open','queue-done':'queue_done','queue-cancel':'queue_cancel'}"),'button -> command map');
+  assert(app.includes('else if(QUEUE_ACTIONS[action])api.striveXLobby({type:QUEUE_ACTIONS[action]})'),'queue buttons go to the Gateway');
+});
+test('queue view is cleared when the Gateway connection drops',()=>{
+  assert(app.includes("setQueue(e.state==='none'?null:e)}else if(e.type==='scan')"),"queue 'none' clears the view");
+  assert(app.includes('if(!gatewayConnected)setQueue(null)'),'disconnect clears the view');
+  assert(/function setQueue\(next\)\{queue=next;clearTimeout\(queueNoteTimer\);queueNote='';clearInterval\(queueTimer\);queueTimer=null;if\(queue\?\.expires_at!=null\)queueTimer=setInterval\(render,1000\);render\(\)\}/.test(app),'one 1 s redraw interval, only while the queue has expires_at');
+  assert(app.includes("if(state.phase!=='lobby'){if(e.state==='denied'&&!(e.reason==='busy'&&queue))setQueueNote(e.reason||'unregistered')}"),'outside the lobby a denial is a short note in the bar, not an overlay');
+});
+test('player screen is untouched',()=>{
+  assert(!player.includes('queue'),'player.html knows nothing about the queue');
+  assert(!app.includes('state.queue'),'the queue is not published to the player window');
+});
