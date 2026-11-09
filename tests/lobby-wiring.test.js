@@ -48,7 +48,7 @@ test('control screen renders the queue bar in the game phase',()=>{
   const css=fs.readFileSync(path.join(root,'public','lobby.css'),'utf8');
   assert(css.includes('.lobby-screen,.control-queue{--lb-')&&css.includes('.control-queue{position:absolute;left:4vw;right:4vw;bottom:calc(3vh + 76px)'),'outside the lobby the strip has the lobby colours and sits above the bottom button row');
   assert(css.includes('.lobby-queue.reserved .lobby-queue-info b{white-space:normal'),'reserved names wrap so the call to tap is never clipped');
-  assert(app.includes('remainingSec:queue?.expires_at==null?null:Math.max(0,Math.ceil((queue.expires_at-Date.now())/1000))')&&app.includes("canOpen:!!state.sessionId&&(queue?.state||'none')==='none'"),'queueView remaining seconds and canOpen');
+  assert(app.includes('remainingSec:queue?.expires_at==null?null:Math.max(0,Math.ceil((queue.expires_at-Date.now())/1000))')&&app.includes("canOpen:!!state.sessionId&&queueSeen&&(queue?.state||'none')==='none'"),'queueView remaining seconds and canOpen');
 });
 test('queue buttons send their commands',()=>{
   assert(app.includes("const QUEUE_ACTIONS={'queue-open':'queue_open','queue-done':'queue_done','queue-cancel':'queue_cancel'}"),'button -> command map');
@@ -56,11 +56,19 @@ test('queue buttons send their commands',()=>{
 });
 test('queue view is cleared when the Gateway connection drops',()=>{
   assert(app.includes("setQueue(e.state==='none'?null:e)}else if(e.type==='scan')"),"queue 'none' clears the view");
-  assert(app.includes('if(!gatewayConnected)setQueue(null)'),'disconnect clears the view');
+  assert(app.includes('if(!gatewayConnected){queueSeen=false;setQueue(null)}'),'disconnect clears the view and the queue announcement');
   assert(/function setQueue\(next\)\{queue=next;clearTimeout\(queueNoteTimer\);queueNote='';clearInterval\(queueTimer\);queueTimer=null;if\(queue\?\.expires_at!=null\)queueTimer=setInterval\(render,1000\);render\(\)\}/.test(app),'one 1 s redraw interval, only while the queue has expires_at');
-  assert(app.includes("if(state.phase!=='lobby'){if(e.state==='denied'&&!(e.reason==='busy'&&queue))setQueueNote(e.reason||'unregistered')}"),'outside the lobby a denial is a short note in the bar, not an overlay');
+  assert(app.includes("if(state.phase!=='lobby'){if(e.state==='denied')setQueueNote(reason)}"),'outside the lobby a denial is a short note in the bar, not an overlay');
+  assert(app.includes("const reason=e.reason==='busy'&&queue?'reserved':e.reason||'unregistered'")&&app.includes("setLobbyOverlay({type:'denied',reason},5000)"),'busy while a queue exists reads as reserved (no join button then)');
 });
 test('player screen is untouched',()=>{
   assert(!player.includes('queue'),'player.html knows nothing about the queue');
   assert(!app.includes('state.queue'),'the queue is not published to the player window');
+});
+test('join is offered only after the Gateway announced the queue on this connection',()=>{
+  assert(/[,;]queueSeen=false[,;]/.test(app.slice(0,app.indexOf('const esc='))),'(a) no queue message yet -> queueSeen false -> canOpen false, no join button');
+  assert(app.includes("queueSeen=true;setQueue(e.state==='none'?null:e)}"),'(b) a queue message (state none included) turns the button on');
+  assert(app.includes('if(!gatewayConnected){queueSeen=false;'),'(c) disconnect turns it off again');
+  assert(app.includes("if(s?.queue&&!queueSeen){queueSeen=true;setQueue(s.queue.state==='none'?null:s.queue)}"),'a reloaded control window picks the announcement up from the snapshot');
+  assert(main.includes("strivex.on('queue',x=>{lastQueue=x});strivex.on('connection',x=>{if(!x.connected)lastQueue=null})")&&main.includes('developmentMode:c.strivex.developmentMode,queue:lastQueue}'),'main keeps the last queue message for the snapshot, cleared on disconnect');
 });

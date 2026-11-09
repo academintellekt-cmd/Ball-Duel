@@ -98,3 +98,7 @@ test('preview reset clears the queue on the control screen too',()=>{
   const before=seen.length;gw.resetPreview();assert.equal(seen.slice(before).filter(x=>x.type==='queue').length,0,'no repeat when already empty');
   gw.stop();
 });
+test('start() announces the queue like the real Gateway (state none)',{timeout:2000},async()=>{
+  const gw=new DemoGateway();const queued=once(gw,'queue');gw.start();
+  assert.deepEqual((await queued)[0],{state:'none',players:[],max:2,expires_at:null});gw.stop();
+});
