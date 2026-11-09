@@ -108,3 +108,16 @@ button.lobby-row.lobby-pick{width:100%}
 .lobby-profile-list li{display:flex;justify-content:space-between;gap:2vw;padding:.9svh 0;border-bottom:1px solid #2b2b2f;font-size:2.9vw}
 .lobby-profile-list li b{font-variant-numeric:tabular-nums}
 .lobby-profile-note{margin:.6svh 0 1svh;font-size:2.8vw;color:#9ea3ad}
+/* Queue for the next game: compact in-flow strip between the duel slots and the launch block; it never overlays START / Records / Finish. */
+.lobby-queue{flex:0 0 auto;display:flex;flex-direction:column;gap:.8svh;padding:1svh 2vw;border:1px solid var(--lb-orange);border-radius:2vw;background:linear-gradient(90deg,#4a2a10,#2b2016)}
+.lobby-queue.none{padding:0;border:0;background:none}
+.lobby-queue-info{display:flex;align-items:baseline;gap:2vw;min-width:0;font-size:2.8vw}
+.lobby-queue-info b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lobby-queue-count,.lobby-queue-clock{flex:none;font-variant-numeric:tabular-nums;color:var(--lb-orange-2)}
+.lobby-queue-slots{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:2vw}
+.lobby-queue-slot{display:block;padding:1svh 1vw;border:1px solid var(--lb-line);border-radius:1.6vw;background:var(--lb-surface);text-align:center;font-size:2.8vw;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lobby-queue-slot.empty{border-style:dashed;color:var(--lb-muted);font-weight:300}
+.lobby-queue-actions{display:flex;gap:2vw}
+.lobby-queue-btn{flex:1;min-height:5svh;padding:.6vw 2vw;border:1px solid var(--lb-line);border-radius:1.8vw;background:var(--lb-surface-2);font-size:3vw;font-weight:700}
+.lobby-queue-btn.primary{border-color:var(--lb-orange);background:linear-gradient(180deg,var(--lb-orange-2),var(--lb-orange));color:#1c1c1e}
+.lobby-queue.none .lobby-queue-btn{min-height:5.5svh;width:100%}

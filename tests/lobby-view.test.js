@@ -57,4 +57,34 @@ assert(html.includes('Ценные кольца · Сложный · 2 мин')&
 assert(html.includes('data-lobby-profile-remove="A"')&&html.includes('Закрыть'),'remove and close');
 html=L.html(view({players:duo,session:true,overlay:{type:'profile',uid:'A',state:'ready',data}}));
 assert(!html.includes('data-lobby-profile-remove'),'no removing a player during a paid session');
+// Queue for the next game.
+{
+  const q=o=>({lang:'ru',state:'none',players:[],max:2,remainingSec:null,canOpen:true,...o});
+  const kim={uid:'K',name:'kim',avatar:'X1'},lee={uid:'L',name:'lee',avatar:'X2'};
+  let h=L.queue(q({}));
+  assert(h.includes('data-action="queue-open"')&&h.includes('Встать в очередь')&&!h.includes('queue-cancel'),'none + canOpen -> join button only');
+  assert.strictEqual(L.queue(q({canOpen:false})),'','none + !canOpen -> empty');
+  assert.strictEqual(L.queue(null),'','no queue -> empty');
+  h=L.queue(q({state:'collecting',players:[kim],remainingSec:25}));
+  assert(h.includes('Приложите браслеты')&&h.includes('kim')&&h.includes('1 / 2')&&h.includes('0:25')&&h.includes('data-action="queue-done"')&&h.includes('data-action="queue-cancel"'),'collecting');
+  h=L.queue(q({state:'collecting',players:[]}));
+  assert(!h.includes('queue-done')&&h.includes('queue-cancel')&&h.includes('0 / 2'),'no Done without a bracelet');
+  h=L.queue(q({state:'waiting',players:[kim,lee]}));
+  assert(h.includes('Следующие: kim и lee')&&h.includes('data-action="queue-cancel"')&&h.includes('Выйти из очереди')&&!h.includes('lobby-queue-slot')&&!h.includes('queue-done'),'waiting');
+  h=L.queue(q({state:'reserved',players:[kim,lee],remainingSec:42}));
+  assert(h.includes('Следующие: kim и lee — приложите браслет')&&h.includes('42'),'reserved');
+  assert(L.queue(q({lang:'en',state:'waiting',players:[kim,lee]})).includes('Up next: kim and lee'),'en names joined with and');
+  h=L.queue(q({state:'waiting',players:[{uid:'X',name:'<img src=x>'}]}));
+  assert(!h.includes('<img')&&h.includes('&lt;img src=x&gt;'),'names are escaped');
+  assert(L.queue(q({lang:'de'})).includes('Join the queue'),'de falls back to en');
+  assert(L.html(view({overlay:{type:'denied',reason:'busy'}})).includes('Аттракцион занят — нажмите «Встать в очередь»'),'denied busy');
+  assert(L.html(view({overlay:{type:'denied',reason:'reserved'}})).includes('Место занято следующими'),'denied reserved');
+  html=L.html(view({queue:q({state:'waiting',players:[kim]})}));
+  assert(html.includes('Следующие')&&html.indexOf('lobby-queue')<html.indexOf('lobby-launch'),'lobby html embeds the queue bar above the launch block');
+  assert(!L.html(view({})).includes('lobby-queue'),'no queue, no bar');
+  html=L.html(view({queue:q({state:'reserved',players:[kim]})}));
+  assert(html.includes('Приложите браслеты')&&!html.includes('Прислони браслет'),'reserved + empty lobby: call for the queued');
+  html=L.html(view({queue:q({state:'waiting',players:[kim]})}));
+  assert(html.includes('Прислони браслет'),'waiting keeps the usual call');
+}
 console.log('lobby-view tests passed');
