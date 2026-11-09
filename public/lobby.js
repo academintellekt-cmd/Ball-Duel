@@ -72,12 +72,13 @@
     const s=strings(q.lang),pl=q.players||[],names=pl.map(p=>esc(p.name)),last=names.pop(),who=names.length?names.join(', ')+esc(s.queueAnd)+last:last||'';
     const btn=(a,label,cls='')=>`<button class="lobby-queue-btn ${cls}" data-action="${a}">${esc(label)}</button>`;
     const left=Number.isFinite(Number(q.remainingSec))&&q.remainingSec!==null?`<span class="lobby-queue-clock">${clock(Number(q.remainingSec))}</span>`:'';
+    const note=q.note?`<div class="lobby-queue-note">${esc(s[q.note==='offline'?'offline_scan':q.note]||q.note)}</div>`:'';
     let body;
     if(q.state==='none')body=q.canOpen?btn('queue-open',s.queueJoin,'primary'):'';
     else if(q.state==='collecting')body=`<div class="lobby-queue-info"><b>${esc(s.queueTap)}</b><span class="lobby-queue-count">${pl.length} / ${esc(q.max)}</span>${left}</div><div class="lobby-queue-slots">${Array.from({length:Math.max(Number(q.max)||0,pl.length)},(_,i)=>pl[i]?`<span class="lobby-queue-slot">${esc(pl[i].name)}</span>`:'<span class="lobby-queue-slot empty">+</span>').join('')}</div><div class="lobby-queue-actions">${pl.length?btn('queue-done',s.queueDone,'primary'):''}${btn('queue-cancel',s.queueLeave)}</div>`;
     else if(q.state==='waiting'||q.state==='reserved')body=`<div class="lobby-queue-info"><b>${esc(s.queueNext)} ${who}${q.state==='reserved'?` — ${esc(s.queueConfirm)}`:''}</b>${q.state==='reserved'?left:''}</div><div class="lobby-queue-actions">${btn('queue-cancel',s.queueLeave)}</div>`;
     else return'';
-    return body?`<section class="lobby-queue ${esc(q.state)}">${body}</section>`:'';
+    return body||note?`<section class="lobby-queue ${esc(q.state)}">${note}${body}</section>`:'';
   }
   // Lobby profile window: opened by tapping a player card. o = {type:'profile', uid, state:'loading'|'ready'|'error', data?, error?}.
   // data comes from the gateway (GET /players/by-bracelet/:uid/profile).

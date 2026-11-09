@@ -128,4 +128,6 @@ button.lobby-row.lobby-pick{width:100%}
 .control-queue{position:absolute;left:4vw;right:4vw;bottom:calc(3vh + 76px);z-index:15;display:flex;flex-direction:column;gap:.8svh;color:var(--lb-text);font-family:inherit}
 .control-queue .lobby-queue{background:linear-gradient(90deg,#4a2a10f2,#2b2016f2)}
 .control-queue .lobby-queue.none{background:none}
+.lobby-queue-note{padding:.8svh 2vw;border-radius:1.6vw;background:#2b2016;font-size:2.8vw;text-align:center}
+.lobby-queue.none:has(.lobby-queue-note){padding:1svh 2vw;border:1px solid var(--lb-orange);background:#2b2016}
 .control-queue-note{padding:1svh 2vw;border:1px solid var(--lb-orange);border-radius:2vw;background:#2b2016f2;font-size:2.8vw;text-align:center}

@@ -44,7 +44,7 @@ test('control screen renders the queue bar in the game phase',()=>{
   assert(app.includes("app.innerHTML=html+(state.phase==='lobby'?'':queueBar())+language()+deviceStatus()"),'every non-lobby control phase (game, countdown, gameover, results, leaderboard) gets the bar');
   assert(app.includes("const bar=app.querySelector('.control-queue'),screen=app.querySelector('.bd-screen');if(bar&&screen)screen.style.paddingBottom=`${Math.ceil(innerHeight-bar.getBoundingClientRect().top)+12}px`"),'the screen content keeps clear of the strip (result cards, leaderboard)');
   assert(/function queueShown\(\)\{if\(state\.phase==='confirm'\)return false;return!!state\.sessionId\|\|state\.phase==='lobby'&&queue\?\.state==='reserved'\}/.test(app),'shown during the session except on confirm; after it only reserved in the lobby');
-  assert(app.includes('queue:queueShown()?queueView():null'),'session lobby embeds the bar');
+  assert(app.includes('queue:queueShown()?{...queueView(),note:queueNote}:null'),'session lobby embeds the bar');
   const css=fs.readFileSync(path.join(root,'public','lobby.css'),'utf8');
   assert(css.includes('.lobby-screen,.control-queue{--lb-')&&css.includes('.control-queue{position:absolute;left:4vw;right:4vw;bottom:calc(3vh + 76px)'),'outside the lobby the strip has the lobby colours and sits above the bottom button row');
   assert(css.includes('.lobby-queue.reserved .lobby-queue-info b{white-space:normal'),'reserved names wrap so the call to tap is never clipped');
@@ -58,8 +58,8 @@ test('queue view is cleared when the Gateway connection drops',()=>{
   assert(app.includes("setQueue(e.state==='none'?null:e)}else if(e.type==='scan')"),"queue 'none' clears the view");
   assert(app.includes('if(!gatewayConnected){queueSeen=false;setQueue(null)}'),'disconnect clears the view and the queue announcement');
   assert(/function setQueue\(next\)\{queue=next;clearTimeout\(queueNoteTimer\);queueNote='';clearInterval\(queueTimer\);queueTimer=null;if\(queue\?\.expires_at!=null\)queueTimer=setInterval\(render,1000\);render\(\)\}/.test(app),'one 1 s redraw interval, only while the queue has expires_at');
-  assert(app.includes("if(state.phase!=='lobby'){if(e.state==='denied')setQueueNote(reason)}"),'outside the lobby a denial is a short note in the bar, not an overlay');
-  assert(app.includes("const reason=e.reason==='busy'&&queue?'reserved':e.reason||'unregistered'")&&app.includes("setLobbyOverlay({type:'denied',reason},5000)"),'busy while a queue exists reads as reserved (no join button then)');
+  assert(app.includes("ScanRoute.scanRoute(e,{phase:state.phase,sessionId:state.sessionId,queue,overlayType:lobbyOverlay?.type})")&&app.includes('queue:queueShown()?{...queueView(),note:queueNote}:null'),'scans go through ScanRoute (decision tested in scan-route.test.js); the lobby strip gets the note');
+  assert(control.includes('../lib/scan-route.js')&&control.indexOf('scan-route.js')<control.indexOf('app.js'),'control page loads scan-route before app.js');
 });
 test('player screen is untouched',()=>{
   assert(!player.includes('queue'),'player.html knows nothing about the queue');
