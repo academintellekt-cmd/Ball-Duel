@@ -39,3 +39,55 @@ test('start() reports listening and a connected gateway',async()=>{
   await listening;assert.deepEqual((await connected)[0],{connected:true});
   assert.equal(gw.snapshot().connected,true);gw.stop();
 });
+function collectQueue(gw){const seen=[];for(const type of['lobby','scan','queue','unlock'])gw.on(type,payload=>seen.push({type,...payload}));return seen}
+function startSession(gw){gw.tap('111');gw.tap('222');gw.lobbyStart({mode:'classic'})}
+test('tap during a session without sign-up -> busy',()=>{
+  const gw=new DemoGateway();const seen=collectQueue(gw);startSession(gw);
+  const before=seen.length;gw.tap('333');
+  assert.deepEqual(seen.slice(before),[{type:'scan',state:'denied',reason:'busy'}]);
+  gw.stop();
+});
+test('sign-up, session end, reserved: outsider denied, queued guest opens the lobby',()=>{
+  const gw=new DemoGateway();const seen=collectQueue(gw);startSession(gw);
+  gw.queueOpen();assert.equal(seen.filter(x=>x.type==='queue').at(-1).state,'collecting');
+  gw.tap('111');assert.deepEqual(seen.filter(x=>x.type==='scan').at(-1),{type:'scan',state:'denied',reason:'busy'});
+  gw.tap('999');assert.deepEqual(seen.filter(x=>x.type==='scan').at(-1),{type:'scan',state:'denied',reason:'unregistered'});
+  gw.tap('000');assert.deepEqual(seen.filter(x=>x.type==='scan').at(-1),{type:'scan',state:'denied',reason:'offline'});
+  gw.tap('333');gw.tap('333');
+  let q=seen.filter(x=>x.type==='queue').at(-1);assert.equal(q.state,'collecting');assert.deepEqual(q.players.map(p=>p.uid),['DEMO-333']);assert.equal(typeof q.expires_at,'number');
+  gw.queueDone();q=seen.filter(x=>x.type==='queue').at(-1);assert.equal(q.state,'waiting');assert.equal(q.expires_at,null);
+  gw.tap('444');assert.deepEqual(seen.filter(x=>x.type==='scan').at(-1),{type:'scan',state:'denied',reason:'busy'});
+  assert.equal(gw.reportResult(10,'completed',{}),true);
+  q=seen.filter(x=>x.type==='queue').at(-1);assert.equal(q.state,'reserved');assert.equal(typeof q.expires_at,'number');
+  gw.tap('555');assert.deepEqual(seen.filter(x=>x.type==='scan').at(-1),{type:'scan',state:'denied',reason:'reserved'});
+  gw.tap('333');
+  assert.deepEqual(seen.filter(x=>x.type==='lobby').at(-1).players.map(p=>p.uid),['DEMO-333']);
+  q=seen.filter(x=>x.type==='queue').at(-1);assert.equal(q.state,'none');assert.deepEqual(q.players,[]);
+  gw.stop();
+});
+test('a confirmed guest is not refused as reserved on a re-tap',()=>{
+  const gw=new DemoGateway();const seen=collectQueue(gw);startSession(gw);
+  gw.queueOpen();gw.tap('333');gw.tap('444');
+  assert.equal(seen.filter(x=>x.type==='queue').at(-1).state,'waiting');
+  gw.reportResult(10,'completed',{});gw.tap('333');
+  const q=seen.filter(x=>x.type==='queue').at(-1);assert.equal(q.state,'reserved');assert.deepEqual(q.players.map(p=>p.uid),['DEMO-444']);
+  gw.lobbyRemove('DEMO-333');gw.tap('333');
+  assert.deepEqual(seen.filter(x=>x.type==='lobby').at(-1).players.map(p=>p.uid),['DEMO-333']);
+  gw.stop();
+});
+test('reserved expires -> queue none',async()=>{
+  const gw=new DemoGateway({queueConfirmMs:20});const seen=collectQueue(gw);startSession(gw);
+  gw.queueOpen();gw.tap('333');gw.queueDone();gw.reportResult(10,'completed',{});
+  assert.equal(seen.filter(x=>x.type==='queue').at(-1).state,'reserved');
+  await new Promise(r=>setTimeout(r,80));
+  assert.equal(seen.filter(x=>x.type==='queue').at(-1).state,'none');
+  gw.tap('555');assert.equal(seen.filter(x=>x.type==='lobby').at(-1).players[0].uid,'DEMO-555');
+  gw.stop();
+});
+test('collecting idles out; cancel clears the queue',async()=>{
+  const gw=new DemoGateway({queueCollectIdleMs:20});const seen=collectQueue(gw);startSession(gw);
+  gw.queueOpen();gw.tap('333');await new Promise(r=>setTimeout(r,80));
+  assert.equal(seen.filter(x=>x.type==='queue').at(-1).state,'waiting');
+  gw.queueCancel();assert.equal(seen.filter(x=>x.type==='queue').at(-1).state,'none');
+  gw.stop();
+});
